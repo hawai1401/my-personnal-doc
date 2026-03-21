@@ -7,6 +7,7 @@ import prisma from '@/lib/prisma';
 import CodeEditor from '@/components/CodeEditor';
 import { Badge } from '@/components/ui/badge';
 import SuccessToast from '@/components/SuccessToaster';
+import DeleteButtonForm from '@/components/DeleteButtonForm';
 
 export async function generateStaticParams() {
   return await prisma.docFunction.findMany({
@@ -42,12 +43,15 @@ export default async function FunctionDetailPage({
           </Link>
         </Button>
 
-        <Button asChild variant='default' size='sm'>
-          <Link href={`/functions/${fn.id}/edit`}>
-            <Pencil className='mr-2 h-4 w-4' />
-            Modifier la fiche
-          </Link>
-        </Button>
+        <div className='flex gap-2'>
+          <Button asChild variant='default' size='sm'>
+            <Link href={`/functions/${fn.id}/edit`}>
+              <Pencil className='mr-2 h-4 w-4' />
+              Modifier la fiche
+            </Link>
+          </Button>
+          <DeleteButtonForm id={id} />
+        </div>
       </div>
 
       <FieldSet>

@@ -9,7 +9,7 @@ datasource db {
 
 enum Language {
   NEXTJS @map("Next.js")
-  REACT @map("React")
+  REACT  @map("React")
 }
 
 model DocFunction {
