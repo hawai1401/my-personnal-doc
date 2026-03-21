@@ -7,10 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier . --write"
+    "postinstall": "prisma generate",
+    "migrate": "prisma db push && prisma generate",
+    "format": "prisma format && prettier . --write"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
+    "@prisma/client": "^7.5.0",
+    "@prisma/extension-accelerate": "^3.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.577.0",
@@ -32,6 +36,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "pretier": "^0.0.1",
+    "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
