@@ -12,6 +12,7 @@
     "format": "prisma format && prettier . --write"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@prisma/client": "^7.5.0",
     "@prisma/extension-accelerate": "^3.0.1",
     "class-variance-authority": "^0.7.1",

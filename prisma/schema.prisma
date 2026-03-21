@@ -7,10 +7,16 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Language {
+  NEXTJS @map("Next.js")
+  REACT @map("React")
+}
+
 model DocFunction {
   id          String   @id @default(cuid())
   name        String
   description String
+  language    Language
   codeExample String   @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
