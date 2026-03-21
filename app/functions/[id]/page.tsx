@@ -6,6 +6,7 @@ import { Field, FieldLabel, FieldSet } from '@/components/ui/field';
 import prisma from '@/lib/prisma';
 import CodeEditor from '@/components/CodeEditor';
 import { Badge } from '@/components/ui/badge';
+import SuccessToast from '@/components/SuccessToaster';
 
 export async function generateStaticParams() {
   return await prisma.docFunction.findMany({
@@ -17,7 +18,9 @@ export async function generateStaticParams() {
 
 export default async function FunctionDetailPage({
   params,
+  searchParams,
 }: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
@@ -26,6 +29,8 @@ export default async function FunctionDetailPage({
   });
 
   if (!fn) notFound();
+
+  const queries = await searchParams;
 
   return (
     <main className='p-10 max-w-5xl mx-auto space-y-8'>
@@ -89,6 +94,12 @@ export default async function FunctionDetailPage({
           </Field>
         </div>
       </FieldSet>
+
+      {'success' in queries &&
+        typeof queries.success === 'string' &&
+        queries.success === 'true' && (
+          <SuccessToast message='Modifié avec succès !' />
+        )}
     </main>
   );
 }

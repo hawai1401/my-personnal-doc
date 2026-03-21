@@ -3,8 +3,12 @@
 import { useState } from 'react';
 import CodeEditor from './CodeEditor';
 
-export default function CodeEditorInput() {
-  const [code, setCode] = useState('');
+export default function CodeEditorInput({
+  defaultValue,
+}: {
+  defaultValue?: string | undefined;
+}) {
+  const [code, setCode] = useState(defaultValue ?? '');
 
   return (
     <div className='group relative'>
@@ -17,6 +21,8 @@ export default function CodeEditorInput() {
             fontSize: 14,
             automaticLayout: true,
             padding: { top: 16, bottom: 16 },
+            formatOnType: true,
+            formatOnPaste: true,
           }}
         />
       </div>

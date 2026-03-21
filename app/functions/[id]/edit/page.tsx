@@ -16,8 +16,33 @@ import {
 import CodeEditorInput from '@/components/CodeEditorInput';
 import FormButton from '@/components/FormButton';
 import { revalidatePath } from 'next/cache';
+import { notFound, redirect } from 'next/navigation';
 
-export default function AddPage() {
+export async function generateStaticParams() {
+  return await prisma.docFunction.findMany({
+    select: {
+      id: true,
+    },
+  });
+}
+
+export default async function AddPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const fn = await prisma.docFunction.findUnique({
+    where: { id },
+    select: {
+      name: true,
+      description: true,
+      language: true,
+      codeExample: true,
+    },
+  });
+  if (!fn) return notFound();
+
   return (
     <main className='w-full p-10 mx-auto'>
       <Button asChild variant='ghost' className='mb-4'>
@@ -41,16 +66,26 @@ export default function AddPage() {
               const codeExample = formData.get('codeExample') as string;
               const language = formData.get('language') as Language;
 
-              await prisma.docFunction.create({
+              await prisma.docFunction.update({
+                where: { id },
                 data: { name, description, codeExample, language },
               });
 
               revalidatePath('/');
+              revalidatePath(`/functions/${id}`);
+              revalidatePath(`/functions/${id}/edit`);
+              redirect(`/functions/${id}?success=true`);
             }}>
             <FieldSet className='space-y-6'>
               <Field>
                 <FieldLabel htmlFor='name'>Nom de la fonction</FieldLabel>
-                <Input id='name' name='name' placeholder='useMemo()' required />
+                <Input
+                  id='name'
+                  name='name'
+                  defaultValue={fn.name}
+                  placeholder='useMemo()'
+                  required
+                />
               </Field>
 
               <Field>
@@ -58,6 +93,7 @@ export default function AddPage() {
                 <Input
                   id='description'
                   name='description'
+                  defaultValue={fn.description}
                   placeholder='À quoi sert cette fonction ?'
                   required
                 />
@@ -67,7 +103,7 @@ export default function AddPage() {
                 <FieldLabel htmlFor='language'>
                   Langage de programmation
                 </FieldLabel>
-                <Select name='language' required>
+                <Select name='language' defaultValue={fn.language} required>
                   <SelectTrigger id='language'>
                     <SelectValue placeholder='Choisir un langage' />
                   </SelectTrigger>
@@ -83,15 +119,15 @@ export default function AddPage() {
 
               <Field>
                 <FieldLabel>Code Source</FieldLabel>
-                <CodeEditorInput />
+                <CodeEditorInput defaultValue={fn.codeExample} />
               </Field>
 
               <FormButton
-                value={'Ajouter'}
+                value={'Modifier'}
                 displayStatus
                 message={{
-                  loading: 'Enregistrement en cours...',
-                  success: 'Enregistré avec succès !',
+                  loading: 'Modification en cours...',
+                  success: 'Modifié avec succès !',
                 }}
               />
             </FieldSet>
