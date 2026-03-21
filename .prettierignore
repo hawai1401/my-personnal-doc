@@ -1,0 +1,8 @@
+# Ignore artifacts:
+node_modules
+.next
+.vscode
+.git
+.gitlab/
+gl-sast-report.json
+gl-secret-detection-report.json
