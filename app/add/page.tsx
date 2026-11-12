@@ -41,11 +41,13 @@ export default function AddPage() {
               const codeExample = formData.get('codeExample') as string;
               const language = formData.get('language') as Language;
 
-              await prisma.docFunction.create({
+              const { id } = await prisma.docFunction.create({
                 data: { name, description, codeExample, language },
+                select: { id: true },
               });
 
               revalidatePath('/');
+              revalidatePath(`/functions/${id}`, 'layout');
             }}>
             <FieldSet className='space-y-6'>
               <Field>

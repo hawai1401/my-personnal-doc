@@ -15,8 +15,7 @@ export default function DeleteButtonForm({ id }: { id: string }) {
         });
 
         revalidatePath('/');
-        revalidatePath(`/functions/${id}`);
-        revalidatePath(`/functions/${id}/edit`);
+        revalidatePath(`/functions/${id}`, 'layout');
         redirect('/');
       }}>
       <Button variant='destructive' type='submit' size='sm'>
